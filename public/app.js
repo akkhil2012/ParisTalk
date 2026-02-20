@@ -46,7 +46,7 @@ socket.on('message', ({ username, text, time }) => {
   div.innerHTML = `
     ${!isOwn ? `<div class="sender">${escapeHtml(username)}</div>` : ''}
     <div class="text">${escapeHtml(text)}</div>
-    <div class="time">${time}</div>
+    <div class="time">${escapeHtml(time)}</div>
   `;
   messagesEl.appendChild(div);
   messagesEl.scrollTop = messagesEl.scrollHeight;

@@ -13,14 +13,20 @@ const users = {};
 
 io.on('connection', (socket) => {
   socket.on('join', (username) => {
-    users[socket.id] = username;
-    socket.broadcast.emit('system', `${username} joined the chat`);
+    if (typeof username !== 'string') return;
+    const name = username.trim().slice(0, 24);
+    if (!name) return;
+    users[socket.id] = name;
+    socket.broadcast.emit('system', `${name} joined the chat`);
     io.emit('userCount', Object.keys(users).length);
   });
 
   socket.on('message', (msg) => {
+    if (typeof msg !== 'string') return;
+    const text = msg.trim().slice(0, 500);
+    if (!text) return;
     const username = users[socket.id] || 'Anonymous';
-    io.emit('message', { username, text: msg, time: new Date().toLocaleTimeString() });
+    io.emit('message', { username, text, time: new Date().toLocaleTimeString() });
   });
 
   socket.on('disconnect', () => {
